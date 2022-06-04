@@ -8,7 +8,7 @@ jobs:
     
     strategy:
       matrix:
-        arch: [arm64]
+        arch: [arm64, armhf]
         
     steps:
     - name: Checkout
