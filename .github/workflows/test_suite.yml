@@ -19,7 +19,7 @@ jobs:
       uses: uraimo/run-on-arch-action@v2
       id: build-package
       with:
-        arch: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
+        arch: ${{ matrix.arch == 'arm64' && 'aarch64' || 'armv7' }}
         distro: ubuntu20.04
         install: |
           apt-get update
