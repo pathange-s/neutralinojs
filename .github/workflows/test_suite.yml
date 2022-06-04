@@ -54,46 +54,12 @@ jobs:
           git config --global --add safe.directory $GITHUB_WORKSPACE
           ./scripts/bz.py
 
-    - name: Setup Spec Requirements
-      if: ${{ matrix.arch == 'x64' }}
-      working-directory: ./bin/extensions/sampleextension
-      run: npm ci
+    # - name: Setup Spec Requirements
+    #   working-directory: ./bin/extensions/sampleextension
+    #   run: npm ci
 
-    - name: Run Spec
-      if: ${{ matrix.arch == 'x64' }}
-      working-directory: ./spec
-      run: |
-        npm ci
-        xvfb-run npm run test
-
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Build
-      run: python ./scripts/bz.py
-      shell: cmd
-
-  build-darwin:
-    runs-on: macos-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Build
-      run: |
-        ./scripts/bz.py
-        chmod +x ./bin/neutralino-mac_x64
-
-    - name: Setup Spec Requirements
-      working-directory: ./bin/extensions/sampleextension
-      run: npm ci
-
-    - name: Run Spec
-      working-directory: ./spec
-      run: |
-        npm ci
-        npm run test
+    # - name: Run Spec
+    #   working-directory: ./spec
+    #   run: |
+    #     npm ci
+    #     xvfb-run npm run test
