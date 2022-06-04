@@ -8,7 +8,7 @@ jobs:
     
     strategy:
       matrix:
-        arch: [arm64]
+        arch: [x64, arm64, armhf]
         
     steps:
     - name: Checkout
@@ -63,3 +63,35 @@ jobs:
       run: |
         npm ci
         xvfb-run npm run test
+
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build
+      run: python ./scripts/bz.py
+      shell: cmd
+
+  build-darwin:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build
+      run: |
+        ./scripts/bz.py
+        chmod +x ./bin/neutralino-mac_x64
+
+    - name: Setup Spec Requirements
+      working-directory: ./bin/extensions/sampleextension
+      run: npm ci
+
+    - name: Run Spec
+      working-directory: ./spec
+      run: |
+        npm ci
+        npm run test
