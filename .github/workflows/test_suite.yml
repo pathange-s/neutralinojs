@@ -8,18 +8,18 @@ jobs:
     
     strategy:
       matrix:
-        arch: [arm64, armhf]
+        arch: [arm64]
         
     steps:
     - name: Checkout
       uses: actions/checkout@v2
         
     - name: Build
-      if: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
+      if: ${{ matrix.arch == 'arm64'}}
       uses: uraimo/run-on-arch-action@v2
       id: build-package
       with:
-        arch: ${{ matrix.arch == 'arm64' && 'aarch64' || 'armv7' }}
+        arch: ${{ matrix.arch == 'arm64'}}
         distro: ubuntu20.04
         install: |
           apt-get update
@@ -38,14 +38,14 @@ jobs:
           ./scripts/bz.py
 
     - name: Setup Spec Requirements
-      if: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
+      if: ${{ matrix.arch == 'arm64'}}
       working-directory: ./bin/extensions/sampleextension
       run: |
         pwd
         npm ci
 
     - name: Run Spec
-      if: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
+      if: ${{ matrix.arch == 'arm64'}}
       working-directory: ./spec
       run: |
         pwd
