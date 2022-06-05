@@ -52,4 +52,4 @@ jobs:
         libayatana-appindicator3-1 \
         xvfb
         npm ci
-        xvfb-run npm run test
+        npm run test
