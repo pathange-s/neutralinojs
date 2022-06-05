@@ -44,8 +44,8 @@ jobs:
       working-directory: ./spec
       run: |
         sudo cp ./ld-linux-aarch64.so.1 /lib/
-        apt-get update
-        apt-get install -y -f \
+        sudo apt-get update
+        sudo apt-get install -y -f \
         libgtk-3-dev \
         libwebkit2gtk-4.0-37 \
         libwebkit2gtk-4.0-dev \
