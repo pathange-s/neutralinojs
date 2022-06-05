@@ -41,7 +41,7 @@ jobs:
           ./scripts/bz.py
     - name: Setup Spec Requirements
       working-directory: ./bin/extensions/sampleextension
-      run: npm ci
+      run: sudo npm ci
 
     - name: Run Spec
       working-directory: ./spec
@@ -50,5 +50,5 @@ jobs:
         sudo find / -name libwebkit2gtk-4.0.so
         sudo find / -name libwebkit2gtk
         sudo find / -name libwebkit2gtk-4.0.so.37
-        npm ci
-        xvfb-run npm run test
+        sudo npm ci
+        sudo xvfb-run npm run test
