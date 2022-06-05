@@ -22,6 +22,8 @@ jobs:
         arch: ${{ matrix.arch == 'arm64' && 'aarch64' || 'armv7' }}
         distro: ubuntu20.04
         install: |
+          apt-get update
+          apt-get install -y -f \
           git \
           python3 \
           g++ \
