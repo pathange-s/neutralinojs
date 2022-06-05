@@ -47,5 +47,8 @@ jobs:
       working-directory: ./spec
       run: |
         sudo cp ./ld-linux-aarch64.so.1 /lib/
+        sudo find / -name libwebkit2gtk-4.0.so
+        sudo find / -name libwebkit2gtk
+        sudo find / -name libwebkit2gtk-4.0.so.37
         npm ci
         xvfb-run npm run test
