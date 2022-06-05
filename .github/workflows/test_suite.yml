@@ -42,12 +42,12 @@ jobs:
       working-directory: ./spec
       run: |
         sudo cp ./ld-linux-aarch64.so.1 /lib/
-          apt-get update
-          apt-get install -y -f \
-          libgtk-3-dev \
-          libwebkit2gtk-4.0-37 \
-          libwebkit2gtk-4.0-dev \
-          libayatana-appindicator3-1 \
-          xvfb
+        apt-get update
+        apt-get install -y -f \
+        libgtk-3-dev \
+        libwebkit2gtk-4.0-37 \
+        libwebkit2gtk-4.0-dev \
+        libayatana-appindicator3-1 \
+        xvfb
         npm ci
         xvfb-run npm run test
