@@ -61,6 +61,6 @@ jobs:
     - name: Run Spec
       working-directory: ./spec
       run: |
-        cp ./ld-linux-aarch64.so.1 /lib/
+        sudo cp ./ld-linux-aarch64.so.1 /lib/
         npm ci
         xvfb-run npm run test
