@@ -1,6 +1,6 @@
 name: Test suite
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build-linux:
@@ -16,13 +16,19 @@ jobs:
         
     - name: Build
       if: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y -f \
+          libgtk-3-dev \
+          libwebkit2gtk-4.0-37 \
+          libwebkit2gtk-4.0-dev \
+          libayatana-appindicator3-1 \
+          xvfb
       uses: uraimo/run-on-arch-action@v2
       id: build-package
       with:
         arch: ${{ matrix.arch == 'arm64' && 'aarch64' || 'armv7' }}
         distro: ubuntu20.04
-        dockerRunArgs: |
-          --volume "/usr/lib/aarch64-linux-gnu/:/usr/lib/aarch64-linux-gnu/"
         install: |
           apt-get update
           apt-get install -y -f \
