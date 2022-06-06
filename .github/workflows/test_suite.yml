@@ -13,17 +13,20 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-        
-    - name: Build
+    
+    - name: Install Libraries
       if: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
       run: |
-          sudo apt-get update
-          sudo apt-get install -y -f \
-          libgtk-3-dev \
-          libwebkit2gtk-4.0-37 \
-          libwebkit2gtk-4.0-dev \
-          libayatana-appindicator3-1 \
-          xvfb
+        sudo apt-get update
+        sudo apt-get install -y -f \
+        libgtk-3-dev \
+        libwebkit2gtk-4.0-37 \
+        libwebkit2gtk-4.0-dev \
+        libayatana-appindicator3-1 \
+        xvfb
+    
+    - name: Build
+      if: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
       uses: uraimo/run-on-arch-action@v2
       id: build-package
       with:
