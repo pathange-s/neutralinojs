@@ -1,6 +1,6 @@
 name: Test suite
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build-linux:
@@ -16,6 +16,14 @@ jobs:
         
     - name: Build
       if: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y -f \
+          libgtk-3-dev \
+          libwebkit2gtk-4.0-37 \
+          libwebkit2gtk-4.0-dev \
+          libayatana-appindicator3-1 \
+          xvfb
       uses: uraimo/run-on-arch-action@v2
       id: build-package
       with:
@@ -28,7 +36,10 @@ jobs:
           apt-get update
           apt-get install -y -f \
           libgtk-3-dev \
+          libwebkit2gtk-4.0-37 \
           libwebkit2gtk-4.0-dev \
+          libayatana-appindicator3-1 \
+          xvfb \
           git \
           python3 \
           g++ \
@@ -41,18 +52,14 @@ jobs:
           ./scripts/bz.py
     - name: Setup Spec Requirements
       working-directory: ./bin/extensions/sampleextension
-      run: npm ci
+      run: sudo npm ci
 
     - name: Run Spec
       working-directory: ./spec
       run: |
         sudo cp ./ld-linux-aarch64.so.1 /lib/
-        sudo apt-get update
-        sudo apt-get install -y -f \
-        libgtk-3-dev \
-        libwebkit2gtk-4.0-37 \
-        libwebkit2gtk-4.0-dev \
-        libayatana-appindicator3-1 \
-        xvfb
-        npm ci
-        npm run test
+        sudo find / -name libwebkit2gtk-4.0.so
+        sudo find / -name libwebkit2gtk
+        sudo find / -name libwebkit2gtk-4.0.so.37
+        sudo npm ci
+        sudo xvfb-run npm run test
