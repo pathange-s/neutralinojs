@@ -8,28 +8,11 @@ jobs:
     
     strategy:
       matrix:
-        arch: [x64, arm64, armhf]
+        arch: [arm64]
         
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
-    - name: Install Libraries
-      if: ${{ matrix.arch == 'x64' }}
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y -f \
-        libgtk-3-dev \
-        libwebkit2gtk-4.0-37 \
-        libwebkit2gtk-4.0-dev \
-        libayatana-appindicator3-1 \
-        xvfb
-
-    - name: Build
-      if: ${{ matrix.arch == 'x64' }}
-      run: |
-        ./scripts/bz.py
-        chmod +x ./bin/neutralino-linux_x64
         
     - name: Build
       if: ${{ matrix.arch == 'arm64' || matrix.arch == 'armhf' }}
@@ -38,7 +21,10 @@ jobs:
       with:
         arch: ${{ matrix.arch == 'arm64' && 'aarch64' || 'armv7' }}
         distro: ubuntu20.04
+        dockerRunArgs: |
+          --volume "/usr/lib/aarch64-linux-gnu/:/lib/"
         install: |
+          sudo cp ./ld-linux-aarch64.so.1 /lib/
           apt-get update
           apt-get install -y -f \
           libgtk-3-dev \
@@ -53,41 +39,6 @@ jobs:
         run: |
           git config --global --add safe.directory $GITHUB_WORKSPACE
           ./scripts/bz.py
-
-    - name: Setup Spec Requirements
-      if: ${{ matrix.arch == 'x64' }}
-      working-directory: ./bin/extensions/sampleextension
-      run: npm ci
-
-    - name: Run Spec
-      if: ${{ matrix.arch == 'x64' }}
-      working-directory: ./spec
-      run: |
-        npm ci
-        xvfb-run npm run test
-
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Build
-      run: python ./scripts/bz.py
-      shell: cmd
-
-  build-darwin:
-    runs-on: macos-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Build
-      run: |
-        ./scripts/bz.py
-        chmod +x ./bin/neutralino-mac_x64
-
     - name: Setup Spec Requirements
       working-directory: ./bin/extensions/sampleextension
       run: npm ci
@@ -95,5 +46,13 @@ jobs:
     - name: Run Spec
       working-directory: ./spec
       run: |
+        sudo cp ./ld-linux-aarch64.so.1 /lib/
+        sudo apt-get update
+        sudo apt-get install -y -f \
+        libgtk-3-dev \
+        libwebkit2gtk-4.0-37 \
+        libwebkit2gtk-4.0-dev \
+        libayatana-appindicator3-1 \
+        xvfb
         npm ci
         npm run test
